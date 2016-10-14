@@ -461,6 +461,8 @@ else ifeq ($(LLVM_VER_SHORT),3.9)
 $(eval $(call LLVM_PATCH,llvm-rL279933-ppc-atomicrmw-lowering)) # Remove for 4.0
 $(eval $(call LLVM_PATCH,llvm-PR22923)) # Remove for 4.0
 $(eval $(call LLVM_PATCH,llvm-r282182)) # Remove for 4.0
+# Remove hardcoded OS X requirements in compilter-rt cmake build
+$(eval $(call LLVM_PATCH,llvm-3.9-osx-10.12))
 endif # LLVM_VER
 
 ifeq ($(LLVM_VER),3.7.1)
