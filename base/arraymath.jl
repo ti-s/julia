@@ -20,8 +20,8 @@ for f in (:-, :~, :conj, :sign)
     @eval begin
         function ($f)(A::AbstractArray)
             F = similar(A)
-            for (iF, iA) in zip(eachindex(F), eachindex(A))
-                F[iF] = ($f)(A[iA])
+            for i in eachindex(F, A)
+                F[i] = ($f)(A[i])
             end
             return F
         end
@@ -35,8 +35,8 @@ imag(A::AbstractArray) = reshape([ imag(x) for x in A ], size(A))
 
 function !(A::AbstractArray{Bool})
     F = similar(A)
-    for (iF, iA) in zip(eachindex(F), eachindex(A))
-        F[iF] = !A[iA]
+    for i in eachindex(F, A)
+        F[i] = !A[i]
     end
     return F
 end
@@ -62,8 +62,8 @@ function _elementwise(op, ::Type{Any}, A::AbstractArray, B::AbstractArray)
 end
 function _elementwise{T}(op, ::Type{T}, A::AbstractArray, B::AbstractArray)
     F = similar(A, T, promote_shape(A, B))
-    for (iF, iA, iB) in zip(eachindex(F), eachindex(A), eachindex(B))
-        @inbounds F[iF] = op(A[iA], B[iB])
+    for i in eachindex(F, A, B)
+        @inbounds F[i] = op(A[i], B[i])
     end
     return F
 end
@@ -75,8 +75,8 @@ for f in (:.+, :.-, :.*, :./, :.\, :.^, :.÷, :.%, :.<<, :.>>, :div, :mod, :rem,
             S = promote_array_type($f, typeof(A), T, R)
             S === Any && return [($f)(A, b) for b in B]
             F = similar(B, S)
-            for (iF, iB) in zip(eachindex(F), eachindex(B))
-                @inbounds F[iF] = ($f)(A, B[iB])
+            for i in eachindex(F, B)
+                @inbounds F[i] = ($f)(A, B[i])
             end
             return F
         end
@@ -85,8 +85,8 @@ for f in (:.+, :.-, :.*, :./, :.\, :.^, :.÷, :.%, :.<<, :.>>, :div, :mod, :rem,
             S = promote_array_type($f, typeof(B), T, R)
             S === Any && return [($f)(a, B) for a in A]
             F = similar(A, S)
-            for (iF, iA) in zip(eachindex(F), eachindex(A))
-                @inbounds F[iF] = ($f)(A[iA], B)
+            for i in eachindex(F, A)
+                @inbounds F[i] = ($f)(A[i], B)
             end
             return F
         end
@@ -421,8 +421,8 @@ function transposeblock!(f,B::AbstractMatrix,A::AbstractMatrix,m::Int,n::Int,off
     return B
 end
 function ccopy!(B, A)
-    for (i,j) = zip(eachindex(B),eachindex(A))
-        B[i] = ctranspose(A[j])
+    for i = eachindex(B, A)
+        B[i] = ctranspose(A[i])
     end
 end
 

@@ -839,24 +839,24 @@ promote_array_type{S<:Union{Complex, Real}, T<:AbstractFloat}(F, ::Type{S}, ::Ty
 function complex{S<:Real,T<:Real}(A::AbstractArray{S}, B::AbstractArray{T})
     if size(A) != size(B); throw(DimensionMismatch()); end
     F = similar(A, typeof(complex(zero(S),zero(T))))
-    for (iF, iA, iB) in zip(eachindex(F), eachindex(A), eachindex(B))
-        @inbounds F[iF] = complex(A[iA], B[iB])
+    for i in eachindex(F, A, B)
+        @inbounds F[i] = complex(A[i], B[i])
     end
     return F
 end
 
 function complex{T<:Real}(A::Real, B::AbstractArray{T})
     F = similar(B, typeof(complex(A,zero(T))))
-    for (iF, iB) in zip(eachindex(F), eachindex(B))
-        @inbounds F[iF] = complex(A, B[iB])
+    for i in eachindex(F, B)
+        @inbounds F[i] = complex(A, B[i])
     end
     return F
 end
 
 function complex{T<:Real}(A::AbstractArray{T}, B::Real)
     F = similar(A, typeof(complex(zero(T),B)))
-    for (iF, iA) in zip(eachindex(F), eachindex(A))
-        @inbounds F[iF] = complex(A[iA], B)
+    for i in eachindex(F, A)
+        @inbounds F[i] = complex(A[i], B)
     end
     return F
 end
