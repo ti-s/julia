@@ -145,6 +145,9 @@ include("osutils.jl")
 include("c.jl")
 include("sysinfo.jl")
 
+# RTLIB
+include("rtlib.jl")
+
 if !isdefined(Core, :Inference)
     include("docs/core.jl")
     Core.atdoc!(CoreDocs.docm)
